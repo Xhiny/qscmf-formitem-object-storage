@@ -3,7 +3,6 @@
 namespace FormItem\ObjectStorage\Controller;
 
 use FormItem\ObjectStorage\Lib\Common;
-use FormItem\ObjectStorage\Lib\File;
 use FormItem\ObjectStorage\Lib\Vendor\Context;
 
 class ObjectStorageController extends \Think\Controller{
@@ -140,6 +139,11 @@ class ObjectStorageController extends \Think\Controller{
             isset($file_data['small_url']) && $res['small_url'] = $file_data['small_url'];
 
             $this->ajaxReturn($res);
+        }
+
+        $config = C('UPLOAD_TYPE_' . strtoupper($type));
+        if ($get_data['file_size'] && !$this->checkSize($get_data['file_size'], $config['maxSize'])) {
+            $this->ajaxReturn(array('err_msg' => '上传文件大小不符！' . '(<=' . floor($config['maxSize'] / 1024 / 1024) . 'MB)'));
         }
 
         $response = $os_cls->policyGet($type);

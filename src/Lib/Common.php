@@ -97,7 +97,9 @@ class Common
         !$jump && $params['jump'] = '0';
 
         $query = http_build_query($params);
-        return U('/extends/ObjectStorage/callBack',[],true,true).'?'.$query;
+        // return U('/extends/ObjectStorage/callBack',[],true,true).'?'.$query;
+        $site_url = env('OBJECT_STORAGE_CALLBACK_URL', U('/extends/ObjectStorage/callBack',[],true,true));
+        return $site_url.'?'.$query;
     }
 
     public static function extractParams(array $get_data):array{
